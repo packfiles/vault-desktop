@@ -58,8 +58,8 @@
                 }
                 return response.json();
             })
-            .then(release => {
-                const latest = release.latest;
+            .then(releases => {
+                const latest = releases.latest;
                 document.getElementById('version').textContent = latest.version;
 
                 document.getElementById('download-windows').setAttribute('href', latest.artifacts.windows);
