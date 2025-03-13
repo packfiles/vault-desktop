@@ -59,15 +59,15 @@
                 return response.json();
             })
             .then(release => {
-                const release = release.latest;
-                document.getElementById('version').textContent = release.version;
+                const latest = release.latest;
+                document.getElementById('version').textContent = latest.version;
 
-                document.getElementById('download-windows').setAttribute('href', release.artifacts.windows);
-                document.getElementById('download-macos').setAttribute('href', release.artifacts.macos_universal);
-                document.getElementById('download-linux').setAttribute('href', release.artifacts.linux);
+                document.getElementById('download-windows').setAttribute('href', latest.artifacts.windows);
+                document.getElementById('download-macos').setAttribute('href', latest.artifacts.macos_universal);
+                document.getElementById('download-linux').setAttribute('href', latest.artifacts.linux);
 
-                if (release.url) {
-                    document.getElementById('release-page').setAttribute('href', release.url);
+                if (latest.url) {
+                    document.getElementById('release-page').setAttribute('href', latest.url);
                 }
             })
             .catch(error => {
