@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packfiles Warp Vault Desktop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://static-pub.packfiles.io/images/favicon.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-gradient-to-r from-orange-400 to-yellow-300 h-screen flex justify-center items-center">
+    <div class="w-full px-4 sm:px-6 h-auto">
+        <div class="bg-white pt-10 pb-8 px-4 shadow-xl ring-1 ring-gray-900/5 mx-auto max-w-lg rounded-lg">
+            <div class="flex mb-4 justify-center items-center">
+                <img width="175px" src="https://static-pub.packfiles.io/images/color_black_oblong.svg" alt="Logo" />
+            </div>
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold mb-2">Download Vault Desktop</h1>
+                <p class="text-gray-600">Version <span id="version">Loading...</span></p>
+            </div>
+
+            <div class="flex justify-center items-center space-x-2">
+                <a id="download-windows" href="#"
+                    class="flex items-center space-x-2 bg-blue-500 border border-blue-600 hover:bg-blue-600 text-white px-4 py-3 rounded-lg shadow-md">
+                    <i class="fa-brands fa-windows fa-2x"></i>
+                    <span>Windows</span>
+                </a>
+
+                <a id="download-macos" href="#"
+                    class="flex items-center space-x-2 bg-gray-900 border border-gray-900 hover:bg-black text-white px-4 py-3 rounded-lg shadow-md">
+                    <i class="fa-brands fa-apple fa-2x"></i>
+                    <span>macOS</span>
+                </a>
+
+                <a id="download-linux" href="#"
+                    class="flex items-center space-x-2 bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 px-4 py-3 rounded-lg shadow-md">
+                    <i class="fa-brands fa-linux fa-2x"></i>
+                    <span>Linux</span>
+                </a>
+            </div>
+            <div class="mt-6 text-center">
+                <a id="release-page" href="#" class="text-xs text-blue-600 hover:underline">View on GitHub</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch('release.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load release information.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const release = data.latest_release;
+                document.getElementById('version').textContent = release.version;
+
+                document.getElementById('download-windows').setAttribute('href', release.artifacts.windows);
+                document.getElementById('download-macos').setAttribute('href', release.artifacts.macos_universal);
+                document.getElementById('download-linux').setAttribute('href', release.artifacts.linux);
+
+                if (release.url) {
+                    document.getElementById('release-page').setAttribute('href', release.url);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching release info:', error);
+                document.getElementById('version').textContent = 'Error';
+            });
+    </script>
+</body>
+
+</html>
