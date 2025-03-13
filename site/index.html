@@ -51,15 +51,15 @@
     </div>
 
     <script>
-        fetch('release.json')
+        fetch('releases.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to load release information.');
                 }
                 return response.json();
             })
-            .then(data => {
-                const release = data.latest_release;
+            .then(release => {
+                const release = release.latest;
                 document.getElementById('version').textContent = release.version;
 
                 document.getElementById('download-windows').setAttribute('href', release.artifacts.windows);

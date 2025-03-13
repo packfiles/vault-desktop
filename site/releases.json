@@ -1,5 +1,5 @@
 {
-    "latest_release": {
+    "latest": {
         "version": "1.0.0",
         "url": "<link to the github release page>",
         "artifacts": {
