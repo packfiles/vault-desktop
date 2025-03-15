@@ -1,0 +1,11 @@
+{
+    "latest": {
+        "version": "v1.0.0",
+        "url": "<link to the github release page>",
+        "artifacts": {
+            "windows": "<windows installer URL>",
+            "linux": "<linux installer URL>",
+            "macos_universal": "<mac app url>"
+        }
+    }
+}

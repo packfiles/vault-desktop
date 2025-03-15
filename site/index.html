@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packfiles Warp Vault Desktop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://static-pub.packfiles.io/images/favicon.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+        rel="stylesheet">
+
+    <script>
+        !function () {
+            var i = "analytics", analytics = window[i] = window[i] || []; if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
+                analytics.invoked = !0; analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "screen", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware", "register"]; analytics.factory = function (e) { return function () { if (window[i].initialized) return window[i][e].apply(window[i], arguments); var n = Array.prototype.slice.call(arguments); if (["track", "screen", "alias", "group", "page", "identify"].indexOf(e) > -1) { var c = document.querySelector("link[rel='canonical']"); n.push({ __t: "bpc", c: c && c.getAttribute("href") || void 0, p: location.pathname, u: location.href, s: location.search, t: document.title, r: document.referrer }) } n.unshift(e); analytics.push(n); return analytics } }; for (var n = 0; n < analytics.methods.length; n++) { var key = analytics.methods[n]; analytics[key] = analytics.factory(key) } analytics.load = function (key, n) { var t = document.createElement("script"); t.type = "text/javascript"; t.async = !0; t.setAttribute("data-global-segment-analytics-key", i); t.src = `https://tir.packfiles.io/ajs/ymuA6HA86TMs051v2Lh8SNvVqhZNpe9N`; var r = document.getElementsByTagName("script")[0]; r.parentNode.insertBefore(t, r); analytics._loadOptions = n }; analytics._writeKey = "ymuA6HA86TMs051v2Lh8SNvVqhZNpe9N";; analytics.SNIPPET_VERSION = "5.2.0";
+                analytics.load("ymuA6HA86TMs051v2Lh8SNvVqhZNpe9N", { integrations: { "Segment.io": { apiHost: "tir.packfiles.io/c" } } })
+                analytics.page();
+            }
+        }();
+    </script>
+
+    <script>
+        window.koalaSettings = { host: 'https://eucalyptus-api.packfiles.io' }
+
+        !function (t) { var k = "ko", i = (window.globalKoalaKey = window.globalKoalaKey || k); if (window[i]) return; var ko = (window[i] = []);["identify", "track", "removeListeners", "on", "off", "qualify", "ready"].forEach(function (t) { ko[t] = function () { var n = [].slice.call(arguments); return n.unshift(t), ko.push(n), ko } }); var n = document.createElement("script"); n.async = !0, n.setAttribute("src", "https://eucalyptus-cdn.packfiles.io/v1/pk_26d867e2e90f026cba4a902416b0f9ab0160/sdk.js"), (document.body || document.head).appendChild(n) }();
+    </script>
+</head>
+
+<body class="bg-gradient-to-r from-orange-400 to-yellow-300 h-screen flex justify-center items-center">
+    <div class="w-full px-4 sm:px-6 h-auto">
+        <div class="bg-white pt-10 pb-8 px-4 shadow-xl ring-1 ring-gray-900/5 mx-auto max-w-lg rounded-lg">
+            <div class="flex mb-4 justify-center items-center">
+                <img width="175px" src="https://static-pub.packfiles.io/images/color_black_oblong.svg" alt="Logo" />
+            </div>
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold mb-2">Download Vault Desktop</h1>
+                <p class="text-gray-600"><span id="version">Loading...</span></p>
+            </div>
+
+            <div class="flex justify-center items-center space-x-2">
+                <a id="download-windows" href="#"
+                    class="flex items-center space-x-2 bg-blue-500 border border-blue-600 hover:bg-blue-600 text-white px-4 py-3 rounded-lg shadow-md">
+                    <i class="fa-brands fa-windows fa-2x"></i>
+                    <span>Windows</span>
+                </a>
+
+                <a id="download-macos" href="#"
+                    class="flex items-center space-x-2 bg-gray-900 border border-gray-900 hover:bg-black text-white px-4 py-3 rounded-lg shadow-md">
+                    <i class="fa-brands fa-apple fa-2x"></i>
+                    <span>macOS</span>
+                </a>
+
+                <a id="download-linux" href="#"
+                    class="flex items-center space-x-2 bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 px-4 py-3 rounded-lg shadow-md">
+                    <i class="fa-brands fa-linux fa-2x"></i>
+                    <span>Linux</span>
+                </a>
+            </div>
+            <div class="mt-6 text-center">
+                <a id="release-page" href="#" class="text-xs text-blue-600 hover:underline">View on GitHub</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch('releases.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load release information.');
+                }
+                return response.json();
+            })
+            .then(releases => {
+                const latest = releases.latest;
+                document.getElementById('version').textContent = latest.version;
+
+                document.getElementById('download-windows').setAttribute('href', latest.artifacts.windows);
+                document.getElementById('download-macos').setAttribute('href', latest.artifacts.macos_universal);
+                document.getElementById('download-linux').setAttribute('href', latest.artifacts.linux);
+
+                if (latest.url) {
+                    document.getElementById('release-page').setAttribute('href', latest.url);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching release info:', error);
+                document.getElementById('version').textContent = 'Error';
+            });
+    </script>
+</body>
+
+</html>
