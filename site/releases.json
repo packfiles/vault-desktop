@@ -3,9 +3,35 @@
         "version": "v1.0.0",
         "url": "<link to the github release page>",
         "artifacts": {
-            "windows": "<windows installer URL>",
-            "linux": "<linux installer URL>",
-            "macos_universal": "<mac app url>"
+            "windows": {
+                "amd64": {
+                    "name": "64 Bit, Intel",
+                    "default": true,
+                    "url": "<windows amd64 installer URL>"
+                },
+                "arm64": {
+                    "name": "64 Bit, ARM",
+                    "url": "<windows arm64 installer URL>"
+                }
+            },
+            "linux": {
+                "amd64": {
+                    "name": "64 Bit, Intel",
+                    "default": true,
+                    "url": "<linux amd64 installer URL>"
+                },
+                "arm64": {
+                    "name": "64 Bit, ARM",
+                    "url": "<linux arm64 installer URL>"
+                }
+            },
+            "macos": {
+                "universal": {
+                    "name": "Universal",
+                    "default": true,
+                    "url": "<macos universal installer URL>"
+                }
+            }
         }
     }
 }

@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Packfiles Warp Vault Desktop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="https://static-pub.packfiles.io/images/favicon.png">
@@ -32,34 +32,25 @@
 
 <body class="bg-gradient-to-r from-orange-400 to-yellow-300 h-screen flex justify-center items-center">
     <div class="w-full px-4 sm:px-6 h-auto">
-        <div class="bg-white pt-10 pb-8 px-4 shadow-xl ring-1 ring-gray-900/5 mx-auto max-w-lg rounded-lg">
+        <div class="bg-white pt-12 pb-12 px-6 shadow-xl ring-1 ring-gray-900/5 mx-auto w-full max-w-3xl rounded-lg">
             <div class="flex mb-4 justify-center items-center">
-                <img width="175px" src="https://static-pub.packfiles.io/images/color_black_oblong.svg" alt="Logo" />
+                <img width="120px" src="https://static-pub.packfiles.io/images/color_black_oblong.svg" alt="Logo" />
             </div>
             <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold mb-2">Download Vault Desktop</h1>
-                <p class="text-gray-600"><span id="version">Loading...</span></p>
+                <h1 class="text-3xl font-black mb-2">Download Vault Desktop</h1>
+                <p class="text-gray-600"><span id="version">One moment...</span></p>
             </div>
 
-            <div class="flex justify-center items-center space-x-2">
-                <a id="download-windows" href="#"
-                    class="flex items-center space-x-2 bg-blue-500 border border-blue-600 hover:bg-blue-600 text-white px-4 py-3 rounded-lg shadow-md">
-                    <i class="fa-brands fa-windows fa-2x"></i>
-                    <span>Windows</span>
-                </a>
-
-                <a id="download-macos" href="#"
-                    class="flex items-center space-x-2 bg-gray-900 border border-gray-900 hover:bg-black text-white px-4 py-3 rounded-lg shadow-md">
-                    <i class="fa-brands fa-apple fa-2x"></i>
-                    <span>macOS</span>
-                </a>
-
-                <a id="download-linux" href="#"
-                    class="flex items-center space-x-2 bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 px-4 py-3 rounded-lg shadow-md">
-                    <i class="fa-brands fa-linux fa-2x"></i>
-                    <span>Linux</span>
-                </a>
+            <div class="hidden md:flex justify-center items-center space-x-2">
+                <div id="download-windows-container"></div>
+                <div id="download-macos-container"></div>
+                <div id="download-linux-container"></div>
             </div>
+
+            <div class="block md:hidden text-center">
+                <p class="text-lg">Warp Vault is only available on desktop platforms.</p>
+            </div>
+
             <div class="mt-6 text-center">
                 <a id="release-page" href="#" class="text-xs text-blue-600 hover:underline">View on GitHub</a>
             </div>
@@ -67,6 +58,18 @@
     </div>
 
     <script>
+        const platformClasses = {
+            windows: 'bg-blue-500 border border-blue-600 hover:bg-blue-600 text-white',
+            macos: 'bg-gray-900 border border-gray-900 hover:bg-black text-white',
+            linux: 'bg-white border border-gray-200 hover:bg-gray-100 text-gray-800'
+        };
+
+        const dropdownClasses = {
+            windows: 'bg-blue-500 text-white hover:bg-blue-600',
+            macos: 'bg-gray-900 text-white hover:bg-black',
+            linux: 'bg-white text-gray-800 hover:bg-gray-100'
+        };
+
         fetch('releases.json')
             .then(response => {
                 if (!response.ok) {
@@ -78,9 +81,9 @@
                 const latest = releases.latest;
                 document.getElementById('version').textContent = latest.version;
 
-                document.getElementById('download-windows').setAttribute('href', latest.artifacts.windows);
-                document.getElementById('download-macos').setAttribute('href', latest.artifacts.macos_universal);
-                document.getElementById('download-linux').setAttribute('href', latest.artifacts.linux);
+                populatePlatform('windows', 'download-windows-container', 'Windows', 'fa-brands fa-windows fa-2x', latest.artifacts.windows);
+                populatePlatform('macos', 'download-macos-container', 'macOS', 'fa-brands fa-apple fa-2x', latest.artifacts.macos);
+                populatePlatform('linux', 'download-linux-container', 'Linux', 'fa-brands fa-linux fa-2x', latest.artifacts.linux);
 
                 if (latest.url) {
                     document.getElementById('release-page').setAttribute('href', latest.url);
@@ -90,6 +93,91 @@
                 console.error('Error fetching release info:', error);
                 document.getElementById('version').textContent = 'Error';
             });
+
+        /**
+         * Render a platform download section.
+         * If multiple builds exist, display a dropdown toggle on the right.
+         *
+         * @param {string} platform - "windows", "macos", or "linux"
+         * @param {string} containerId - The container element id for this platform
+         * @param {string} platformLabel - Label for the main button (e.g., "Windows")
+         * @param {string} iconClass - CSS classes for the platform icon (FontAwesome)
+         * @param {Object} artifactObj - The artifact object for this platform
+         */
+        function populatePlatform(platform, containerId, platformLabel, iconClass, artifactObj) {
+            const buildOptions = Object.entries(artifactObj).map(([key, build]) => ({
+                key,
+                name: build.name,
+                default: build.default,
+                url: build.url
+            }));
+
+            const defaultBuild = buildOptions.find(opt => opt.default) || buildOptions[0];
+            const container = document.getElementById(containerId);
+
+            const mainButtonContent = (buildName) => `
+        <i class="${iconClass} mr-2"></i>
+        <div class="ml-2 text-left">
+          <span class="block text-lg font-bold">${platformLabel}</span>
+          <span class="block text-sm">${buildName}</span>
+        </div>
+      `;
+
+            if (buildOptions.length > 1) {
+                container.innerHTML = `
+          <div class="flex">
+            <!-- Main download button with build info and minimum width -->
+            <a id="${containerId}-main" href="${defaultBuild.url}" class="flex items-center ${platformClasses[platform]} px-4 py-3 rounded-l-lg shadow-md min-w-[200px]">
+              ${mainButtonContent(defaultBuild.name)}
+            </a>
+            <!-- Dropdown toggle button -->
+            <div class="relative">
+              <button id="${containerId}-dropdown-toggle" class="flex items-center ${platformClasses[platform]} px-2 py-3 h-full rounded-r-lg border-l-0 shadow-md focus:outline-none">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <div id="${containerId}-dropdown-menu" class="absolute right-0 mt-1 w-40 border border-gray-300 rounded shadow-lg hidden z-10">
+                ${buildOptions.map(option => `
+                  <a href="#" data-url="${option.url}" data-name="${option.name}" class="block px-4 py-2 ${dropdownClasses[platform]}">
+                    ${option.name}
+                  </a>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+
+                const toggleButton = document.getElementById(`${containerId}-dropdown-toggle`);
+                const dropdownMenu = document.getElementById(`${containerId}-dropdown-menu`);
+                toggleButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!toggleButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.add('hidden');
+                    }
+                });
+
+                const menuItems = dropdownMenu.querySelectorAll('a');
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const selectedUrl = item.getAttribute('data-url');
+                        const selectedName = item.getAttribute('data-name');
+                        document.getElementById(`${containerId}-main`).innerHTML = mainButtonContent(selectedName);
+                        document.getElementById(`${containerId}-main`).setAttribute('href', selectedUrl);
+                        dropdownMenu.classList.add('hidden');
+                    });
+                });
+            } else {
+                container.innerHTML = `
+          <a id="${containerId}-main" href="${defaultBuild.url}" class="flex items-center ${platformClasses[platform]} px-4 py-3 rounded-lg shadow-md min-w-[220px]">
+            ${mainButtonContent(defaultBuild.name)}
+          </a>
+        `;
+            }
+        }
     </script>
 </body>
 
