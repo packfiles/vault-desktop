@@ -78,7 +78,7 @@
                 return response.json();
             })
             .then(releases => {
-                const latest = releases.latest;
+                const latest = releases.stable;
                 document.getElementById('version').textContent = latest.version;
 
                 populatePlatform('windows', 'download-windows-container', 'Windows', 'fa-brands fa-windows fa-2x', latest.artifacts.windows);
